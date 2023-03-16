@@ -9,7 +9,7 @@
         </div>
         <b>盒子配置</b>
         <div style="margin:10px 0">
-            <el-button type="primary" >芝士雪豹 <i class="el-icon-download"></i></el-button>
+            <el-button type="primary" >芝士雪豹 <i class="el-icon-download" ></i></el-button>
             <el-button type="primary" >芝士按钮 <i class="el-icon-circle-plus-outline"></i></el-button>
         </div>
 
@@ -80,6 +80,7 @@ export default {
     methods: {
         search() {
         },
+
         handleApp() {
             this.dialogFormVisible = true;
             this.form = {};

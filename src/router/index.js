@@ -20,15 +20,16 @@ const routes = [
         title:'盒子管理'
       },
       component: () => import('../views/box.vue'),
-      children:[
-        {
-            path: '/ipc/:boxId',
-            name: 'ipc',
-            component: () => import('../views/ipc.vue'),
-            meta: { title: '摄像头配置' }
-        },
-      ]
+      
+        
+      
     },
+    {
+      path: '/ipc/:boxId',
+      name: 'ipc',
+      component: () => import('../views/ipc.vue'),
+      meta: { title: '摄像头配置' }
+  },
     {
       path: 'home',
       name: 'Home',

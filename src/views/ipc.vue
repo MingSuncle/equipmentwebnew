@@ -8,23 +8,15 @@
         </div>
         <b>摄像头配置</b>
         <div style="margin:10px 0">
-            <el-button type="primary" >芝士雪豹 <i class="el-icon-download"></i></el-button>
+            <el-button type="primary" @click="goBack">返回 <i class="el-icon-back" ></i></el-button>
             <el-button type="primary" >芝士按钮 <i class="el-icon-circle-plus-outline"></i></el-button>
         </div>
 
-        <el-table :data="IPCs" class="table" header-cell-class-name="table-header">
+        <el-table :data="tableData"  header-cell-class-name="table-header">
                 <el-table-column align="center" label="摄像头id" prop="ipcId"></el-table-column>
                 <el-table-column align="center" label="摄像头名称" prop="ipcName"></el-table-column>
                 <el-table-column align="center" label="摄像头ip" prop="ipcIp"></el-table-column>
-                <el-table-column align="center" label="摄像头url" prop="ipcUrl" min-width="150"></el-table-column>
-                <el-table-column align="center" label="摄像头位置" prop="ipcposition"></el-table-column>
-                <el-table-column align="center" label="监测区域" prop="ipcDetectArea" min-width="150"></el-table-column>
-                <el-table-column align="center" label="所属盒子id" prop="ipcBoxNo"></el-table-column>"
-                <el-table-column align="center" label="fps" prop="ipcFps"></el-table-column>
-                <el-table-column align="center" label="监测时间">
-                    <el-table-column align="center" label="开始" prop="ipcDetectTimeBgn"></el-table-column>"
-                    <el-table-column align="center" label="结束" prop="ipcDetectTimeEnd"></el-table-column>"
-                </el-table-column>
+                <el-table-column align="center" label="摄像头品牌" prop="ipcBrand"></el-table-column>
                 <el-table-column label="操作" align="center" width="200">
                     <template #default="scope">
                         <el-button type="text" icon="el-icon-edit" class="blue" @click="handleEdit(scope.$index, scope.row)"
@@ -91,10 +83,11 @@ export default {
         this.load()
     },
     methods: {
+        goBack(){
 
-        search() {
-
+            this.$router.go(-1);
         },
+   
         handleApp() {
             this.dialogFormVisible = true
             this.form = {}
@@ -116,6 +109,30 @@ export default {
             })
 
         },
+        async getIPCs(){
+            try {
+                this.request.get("/ipcConfig/getIpcConfigList", {
+                params: {
+                    ipc_boxNo: this.boxId,
+                    current_page: this.current_page,
+                    pageSize: this.pageSize,
+                }
+            }).then(res => {
+                console.log(res.data)
+                this.tableData = res.data.result
+                console.log(this.tableData)
+                this.total = res.data.total
+                console.log(this.total)
+            })
+            } catch (error) {
+                console.log(error)
+                this.$message({
+                    message: '获取摄像头列表失败',
+                    duration: 2000,
+                    type: 'error'
+                });
+            }
+        },
 
         handleSizeChange(pageSize) {
             this.pageSize = pageSize
@@ -125,6 +142,9 @@ export default {
             this.current_page = current_page
             this.load()
         },
+        search(){
+            console.log("search")
+        }
     }
 }
 </script>
