@@ -30,6 +30,12 @@ const routes = [
       component: () => import('../views/ipc.vue'),
       meta: { title: '摄像头配置' }
   },
+  {
+    path: '/channel',
+    name: 'channel',
+    component: () => import('../views/channel.vue'),
+    meta: { title: '通道配置' }
+},
     {
       path: 'home',
       name: 'Home',
