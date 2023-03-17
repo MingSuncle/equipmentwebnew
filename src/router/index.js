@@ -36,6 +36,12 @@ const routes = [
     component: () => import('../views/channel.vue'),
     meta: { title: '通道配置' }
 },
+{
+    path: '/area',
+    name: 'area',
+    component: () => import('../views/area.vue'),
+    meta: { title: '区域配置' }
+},
     {
       path: 'home',
       name: 'Home',

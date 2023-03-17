@@ -93,11 +93,8 @@ export default {
             //     pageSize: this.pageSize,
             // }
             }).then(res => {
-                console.log(res.data.result);
                 this.tableData = res.data.result;
-                console.log(this.tableData);
                 this.total = res.data.total;
-                console.log(this.total);
             });
         },
         handleSizeChange(pageSize) {

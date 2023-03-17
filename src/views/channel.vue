@@ -6,17 +6,19 @@
             <el-button class="ml-5" type="primary" @click="search" v-model="phone">搜索
             </el-button>
         </div>
-        <b>通道</b>
+        <b>通道配置</b>
         <div style="margin:10px 0">
             <el-button type="primary" @click="goBack">返回 <i class="el-icon-back" ></i></el-button>
             <el-button type="primary" >芝士按钮 <i class="el-icon-circle-plus-outline"></i></el-button>
         </div>
 
         <el-table :data="tableData"  header-cell-class-name="table-header">
-                <el-table-column align="center" label="摄像头id" prop="ipcId"></el-table-column>
-                <el-table-column align="center" label="摄像头名称" prop="ipcName"></el-table-column>
-                <el-table-column align="center" label="摄像头ip" prop="ipcIp"></el-table-column>
-                <el-table-column align="center" label="摄像头品牌" prop="ipcBrand"></el-table-column>
+                <el-table-column align="center" label="通道id" prop="channelId"></el-table-column>
+                <el-table-column align="center" label="通道名称" prop="channelName"></el-table-column>
+                <el-table-column align="center" label="检测事件" prop="eventName"></el-table-column>
+                <el-table-column align="center" label="抽帧率" prop="videoFps"></el-table-column>
+                <el-table-column align="center" label="端口" prop="videoPort"></el-table-column>
+                <el-table-column align="center" label="码流" prop="videoStream"></el-table-column>
                 <el-table-column label="操作" align="center" width="200">
                     <template #default="scope">
                         <el-button type="text" icon="el-icon-edit" class="blue" @click="handleEdit(scope.$index, scope.row)"
@@ -26,8 +28,16 @@
                             >删除
                         </el-button>
                         <el-row>
-                            <router-link :to="`/ipc-event/${scope.row.ipcId}`">
-                                <el-button type="text" icon="el-icon-setting" class="blue mr10">事件配置 </el-button>
+                            <router-link :to="{
+                            path: '/area',
+                            query: {
+                                ipcId:scope.row.videoId,
+                                boxId:scope.row.boxId,
+                                channelId:scope.row.channelId
+                                
+                            }
+                            }">
+                                <el-button type="text" icon="el-icon-setting" class="blue mr10">检测区域配置 </el-button>
                             </router-link>
                             <router-link :to="`/modify_ipc/${scope.row.ipcId}`">
                                 <el-button type="text" icon="el-icon-news" class="blue">待生效配置 </el-button>
@@ -57,7 +67,8 @@ export default {
     name: "ipc",
     data() {
         return {
-            boxId: this.$route.params.boxId,
+            boxId: this.$route.query.boxId,
+            ipcId: this.$route.query.ipcId,
             // cid: JSON.parse(localStorage.getItem("user")).cid,
             total: 0,
             pageSize: 10,
@@ -94,40 +105,26 @@ export default {
         },
 
         load() {
-            this.request.get("/ipcConfig/getIpcConfigList", {
-                params: {
-                    ipc_boxNo: this.boxId,
-                    current_page: this.current_page,
-                    pageSize: this.pageSize,
-                }
-            }).then(res => {
-                console.log(res.data)
-                this.tableData = res.data.result
-                console.log(this.tableData)
-                this.total = res.data.total
-                console.log(this.total)
-            })
+            this.getChannels()
 
         },
-        async getIPCs(){
+        async getChannels(){
             try {
-                this.request.get("/ipcConfig/getIpcConfigList", {
+                this.request.get("/channel/getChannel", {
                 params: {
-                    ipc_boxNo: this.boxId,
-                    current_page: this.current_page,
-                    pageSize: this.pageSize,
+                    ipc_id: this.ipcId,
+                    box_id: this.boxId
+                    // current_page: this.current_page,
+                    // pageSize: this.pageSize,
                 }
             }).then(res => {
-                console.log(res.data)
                 this.tableData = res.data.result
-                console.log(this.tableData)
                 this.total = res.data.total
-                console.log(this.total)
             })
             } catch (error) {
                 console.log(error)
                 this.$message({
-                    message: '获取摄像头列表失败',
+                    message: '获取通道列表失败',
                     duration: 2000,
                     type: 'error'
                 });

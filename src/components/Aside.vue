@@ -3,7 +3,7 @@
         text-color='#fff' active-text-color="#2990d6" :collapse-transition="true" :collapse="isCollapse" router>
         <div style="height:60px;line-height: 60px;text-align: center;">
             <img src="../assets/logoa.png" alt="" style="width:20px;position:relative;top:5px;margin-right: 5px;">
-            <b style="color:white " v-show="logoTextShow">企业防疫官</b>
+            <b style="color:white " v-show="logoTextShow">智能平台(demo)</b>
         </div>
         <el-menu-item index="/">
             <template slot="title">
