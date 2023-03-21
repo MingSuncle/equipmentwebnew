@@ -13,16 +13,38 @@ const routes = [
     meta:{
       title:'首页'
     },
-    children: [{
+    children: [
+    {
+        path:'model',
+        name:'model',
+        meta:{
+            title:'模型管理'
+        },
+        component:() => import('../views/modelManage/model.vue')
+    },
+    {
+        path:'versionManage',
+        name:'versionManage',
+        meta:{
+            title:'版本管理'
+        },
+        component:() => import('../views/modelManage/versionManage.vue')
+    },
+    {
+        path:'dataManage',
+        name:'dataManage',
+        meta:{
+            title:'模型管理'
+        },
+        component:() => import('../views/dataManage/data.vue')
+    },
+    {
       path: 'box',
       name: 'box',
       meta:{
         title:'盒子管理'
       },
       component: () => import('../views/box.vue'),
-      
-        
-      
     },
     {
       path: '/ipc/:boxId',

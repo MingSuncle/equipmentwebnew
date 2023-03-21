@@ -368,9 +368,9 @@ export default {
 
 
         load() {
-            this.request.get("/DataManage/selectStaff", {
+            this.request.get("http://47.100.71.212:8877/DataManage/selectStaff", {
                 params: {
-                    cid: this.cid,
+                    cid: 1,
                     pageSize: this.pageSize,
                     current_page: this.current_page,
                     phone: this.phone,

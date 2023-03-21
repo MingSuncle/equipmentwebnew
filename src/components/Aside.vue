@@ -15,7 +15,11 @@
         <i class="el-icon-user-solid"></i>
         <span slot="title">盒子管理</span>
         </el-menu-item>
-        <el-menu-item index="/dataManage">
+        <el-menu-item index="/model">
+        <i class="el-icon-cloudy"></i>
+        <span slot="title">模型管理</span>
+      </el-menu-item>
+      <el-menu-item index="/dataManage">
         <i class="el-icon-cloudy"></i>
         <span slot="title">数据管理</span>
       </el-menu-item>
