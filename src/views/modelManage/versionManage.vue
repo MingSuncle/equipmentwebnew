@@ -10,7 +10,9 @@
             <b>版本管理</b>
             <div style="margin:10px 0">
                 <el-button type="primary" @click="goBack">返回 <i class="el-icon-back"></i></el-button>
+                <el-button type="primary" @click="newVersion">新建版本 <i class="el-icon-upload"></i></el-button>
             </div>
+
 
             <el-table :data="tableData" border>
                 <el-table-column prop="modelId" label="模型Id" width="100">
@@ -21,7 +23,7 @@
                 </el-table-column>
                 <el-table-column prop="modelFile" label="模型文件位置" width="500">
                 </el-table-column>
-                <el-table-column prop="modelRemark" label="模型描述" width="400">
+                <el-table-column prop="modelRemark" label="模型描述" width="300">
                 </el-table-column>
                 <el-table-column label="操作" align="center" min-width="100">
                     <template #default="scope">
@@ -56,12 +58,27 @@
 
                 <el-form-item label="版本号" prop="modelVersion"><el-input
                         v-model="editForm.modelVersion"></el-input></el-form-item>
-                <el-form-item label="模型说明" prop="modelRemark"><el-input
+                <el-form-item label="模型说明" prop="modelRemark"><el-input type="textarea" :rows="3" placeholder="请输入模型说明"
                         v-model="editForm.modelRemark"></el-input></el-form-item>
 
             </el-form><span slot="footer" class="dialog-footer">
                 <el-button @click="cancelEdit">取 消</el-button>
                 <el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog title="新增模型配置" :visible.sync="createVisible" width="40%">
+            <el-form :model="editForm" label-width="120px" ref="editForm" :rules="rules">
+
+
+                <el-form-item label="版本号" prop="modelVersion"><el-input
+                        v-model="editForm.modelVersion"></el-input></el-form-item>
+                <el-form-item label="模型说明" prop="modelRemark"><el-input type="textarea" :rows="3" placeholder="请输入模型说明"
+                        v-model="editForm.modelRemark"></el-input></el-form-item>
+
+            </el-form><span slot="footer" class="dialog-footer">
+                <el-button @click="cancelCreate">取 消</el-button>
+                <el-button type="primary" @click="handleCreate">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -78,6 +95,7 @@ export default {
         return {
             // cid: JSON.parse(localStorage.getItem("user")).cid,
             modelId: this.$route.query.modelId,
+            modelName: this.$route.query.modelName,
             total: 0,
             pageSize: 10,
             current_page: 1,
@@ -86,6 +104,7 @@ export default {
             form: {},
             dialogFormVisible: false,
             editVisible: false,
+            createVisible: false,
             editForm: {},
             rules: {
                 boxName: [{ required: true, message: '请输入盒子名称', trigger: 'blur' }],
@@ -119,7 +138,6 @@ export default {
 
             this.editForm = { ...row };
             this.editVisible = true;
-            console.log(this.editForm)
         },
         load() {
             console.log(this.modelId)
@@ -142,7 +160,7 @@ export default {
                     try {
 
                         this.request.post("/model/modifyModel", this.editForm).then(res => {
-                                this.load()
+                            this.load()
                         })
                         this.$message(this.successMessage('修改成功'));
 
@@ -156,6 +174,9 @@ export default {
                 }
             });
         },
+        newVersion() {
+            this.createVisible = true;
+        },
         cancelEdit() {
             this.editVisible = false;
             this.editForm = {};
@@ -165,6 +186,33 @@ export default {
                 type: 'info'
             });
             this.$refs['editForm'].clearValidate();
+        },
+        cancelCreate(){
+            this.createVisible = false;
+            this.editForm = {};
+            this.$message({
+                message: '操作已取消',
+                duration: 1500,
+                type: 'info'
+            });
+        },
+        handleCreate(){
+            this.editForm["modelId"] = this.modelId;
+            this.editForm["modelName"] = this.modelName;
+            this.request.post("/model/addVersion",this.editForm).then(res => {
+                if(res.code==300){
+                    this.$message(this.faildMessage('版本号已存在'));
+                }
+                else if(res.code==500){
+                    this.$message(this.faildMessage('新增失败'));
+                }
+                else{
+                    this.$message(this.successMessage('修改成功'));
+                    this.createVisible = false;
+                    this.editForm = {};
+                    this.load();
+                }
+            })
         },
         handleUploadSuccess() {
             this.$message.success("上传成功")

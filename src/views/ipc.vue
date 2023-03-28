@@ -107,11 +107,8 @@ export default {
                     pageSize: this.pageSize,
                 }
             }).then(res => {
-                console.log(res.data)
                 this.tableData = res.data.result
-                console.log(this.tableData)
                 this.total = res.data.total
-                console.log(this.total)
             })
 
         },
@@ -124,8 +121,11 @@ export default {
                         pageSize: this.pageSize,
                     }
                 }).then(res => {
+                    console.log(res.data)
                     this.tableData = res.data.result
+                    console.log(this.tableData)
                     this.total = res.data.total
+                    console.log(this.total)
                 })
             } catch (error) {
                 console.log(error)

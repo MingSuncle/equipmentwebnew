@@ -31,8 +31,8 @@
                             <router-link :to="{
                             path: '/versionManage',
                             query: {
-                                modelId:scope.row.modelId
-                                
+                                modelId:scope.row.modelId,
+                                modelName:scope.row.modelName
                             }
                             }">
                                 <el-button type="text" icon="el-icon-news" class="blue">版本管理</el-button>
