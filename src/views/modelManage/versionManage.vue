@@ -207,12 +207,34 @@ export default {
                     this.$message(this.faildMessage('新增失败'));
                 }
                 else{
-                    this.$message(this.successMessage('修改成功'));
+                    this.$message(this.successMessage('新增成功'));
                     this.createVisible = false;
                     this.editForm = {};
                     this.load();
                 }
             })
+        },
+        handleDelete(index,row){
+            this.$confirm('确认删除版本？','提示',{
+                type:'warning',
+                confirmButtonText:'确定',
+                cancelButtonTest: '取消'      
+            }).then(()=>(
+                this.request.get("/model/deleteModel", {
+                    params:{
+                        model_id:row.modelId,
+                        model_version:row.modelVersion
+                    }
+            }).then(res => {
+                if(res.code==200){
+                    this.$message(this.successMessage('删除成功'));
+                    this.load();
+                }
+                else{
+                    this.$message(this.failedMessage('删除失败'));
+                }
+            }))
+            );
         },
         handleUploadSuccess() {
             this.$message.success("上传成功")

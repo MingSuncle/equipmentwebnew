@@ -1,57 +1,64 @@
 <template>
     <div>
         <div>
-        <div style="padding:10px 0">
-            <el-input style="width:200px" placeholder="输入电话" suffix-icon="el-icon-search" v-model="phone">
-            </el-input>
-            <el-button class="ml-5" type="primary" @click="search" v-model="phone">搜索
-            </el-button>
-        </div>
-        <b>模型管理</b>
-        <div style="margin:10px 0">
-            <el-button type="primary" >增加模型 <i class="el-icon-upload"></i></el-button>
-        </div>
+            <b>模型管理</b>
+            <div style="margin:10px 0">
+                <el-button type="primary" @click="newModel">增加模型 <i class="el-icon-upload"></i></el-button>
+            </div>
 
-        <el-table :data="tableData" border>
-            <el-table-column prop="modelId" label="模型Id" width="190">
-            </el-table-column>
-            <el-table-column prop="modelName" label="模型名称" width="200">
-            </el-table-column>
-            <el-table-column prop="modelNum" label="已有版本" width="75">
-            </el-table-column>
-            <el-table-column label="操作" align="center" min-width="100">
+            <el-table :data="tableData" border>
+                <el-table-column prop="modelId" label="模型Id" width="190">
+                </el-table-column>
+                <el-table-column prop="modelName" label="模型名称" width="200">
+                </el-table-column>
+                <el-table-column prop="modelNum" label="已有版本" width="75">
+                </el-table-column>
+                <el-table-column label="操作" align="center" min-width="100">
                     <template #default="scope">
-                        <el-button type="text" icon="el-icon-edit" class="blue" @click="handleEdit(scope.$index, scope.row)"
-                            >修改
+                        <el-button type="text" icon="el-icon-edit" class="blue"
+                            @click="handleEdit(scope.$index, scope.row)">修改
                         </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
-                            >删除
+                        <el-button type="text" icon="el-icon-delete" class="red"
+                            @click="handleDelete(scope.$index, scope.row)">删除
                         </el-button>
                         <el-row>
                             <router-link :to="{
-                            path: '/versionManage',
-                            query: {
-                                modelId:scope.row.modelId,
-                                modelName:scope.row.modelName
-                            }
+                                path: '/versionManage',
+                                query: {
+                                    modelId: scope.row.modelId,
+                                    modelName: scope.row.modelName
+                                }
                             }">
                                 <el-button type="text" icon="el-icon-news" class="blue">版本管理</el-button>
                             </router-link>
                         </el-row>
                     </template>
                 </el-table-column>
-        </el-table>
-        
-        <div style="padding:10px 0">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="current_page" :page-sizes="[5, 10, 15, 20]" :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-        </div>
-       
+            </el-table>
+
+            <div style="padding:10px 0">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                    :current-page="current_page" :page-sizes="[5, 10, 15, 20]" :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
             </div>
+
+        </div>
+        <el-dialog title="新增模型配置" :visible.sync="createVisible" width="40%">
+            <el-form :model="editForm" label-width="120px" ref="editForm" >
+
+
+                <el-form-item label="模型ID" prop="modelId"><el-input v-model="editForm.modelId"
+                        placeholder="请输入模型ID"></el-input></el-form-item>
+                <el-form-item label="模型名称" prop="modelName"><el-input placeholder="请输入模型名称"
+                        v-model="editForm.modelName"></el-input></el-form-item>
+
+            </el-form><span slot="footer" class="dialog-footer">
+                <el-button @click="cancelCreate">取 消</el-button>
+                <el-button type="primary" @click="handleCreate">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
-    
 </template>
 
 <script>
@@ -71,6 +78,8 @@ export default {
             phone: "",
             form: {},
             dialogFormVisible: false,
+            createVisible: false,
+            editForm: {},
         };
     },
     props: {},
@@ -80,22 +89,49 @@ export default {
     methods: {
         search() {
         },
-
+        newModel() {
+            this.createVisible = true;
+        },
         handleApp() {
             this.dialogFormVisible = true;
             this.form = {};
         },
         load() {
             this.request.get("/model/getAllModelByType", {
-            // params: {
-            //     // cid: this.cid,
-            //     current_page: this.current_page,
-            //     pageSize: this.pageSize,
-            // }
+                // params: {
+                //     // cid: this.cid,
+                //     current_page: this.current_page,
+                //     pageSize: this.pageSize,
+                // }
             }).then(res => {
                 this.tableData = res.data.result;
                 this.total = res.data.total;
             });
+        },
+        cancelCreate(){
+            this.createVisible = false;
+            this.editForm = {};
+            this.$message({
+                message: '操作已取消',
+                duration: 1500,
+                type: 'info'
+            });
+        },
+        handleCreate(){
+            this.request.post("/model/addModel",this.editForm).then(res => {
+                if(res.code==300){
+                    this.$message(this.faildMessage('模型已存在'));
+                }
+                else if(res.code==500){
+                    this.$message(this.faildMessage('新增失败'));
+                }
+                else{
+                    this.$message(this.successMessage('新增成功'));
+                    this.createVisible = false;
+                    this.editForm = {};
+                    this.load();
+                }
+            })
         },
         handleSizeChange(pageSize) {
             this.pageSize = pageSize;
@@ -105,11 +141,23 @@ export default {
             this.current_page = current_page;
             this.load();
         },
+        successMessage(msg) {
+            return {
+                message: msg,
+                duration: 2000,
+                type: 'success'
+            };
+        },
+        faildMessage(msg) {
+            return {
+                message: msg,
+                duration: 2000,
+                type: 'error'
+            };
+        },
     },
     components: { RouterView }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

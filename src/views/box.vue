@@ -20,7 +20,12 @@
             </el-table-column>
             <el-table-column prop="boxIp" label="盒子ip">
             </el-table-column>
-            <el-table-column prop="boxIp" label="盒子ip">
+            <el-table-column  label="第三方URL">
+                <template #default="scope">
+                        <el-row>
+                            <el-col v-for="url in (scope.row.centerThirdPartyUrls|| '').split(',')" v-text="url"></el-col>
+                        </el-row>
+                    </template>
             </el-table-column>
             <el-table-column label="操作" align="center" min-width="100">
                     <template #default="scope">
@@ -78,6 +83,9 @@ export default {
         this.load();
     },
     methods: {
+        splitJoin(theText){
+      	return theText.split(', ');
+      },
         search() {
         },
 
@@ -105,7 +113,9 @@ export default {
             this.current_page = current_page;
             this.load();
         },
+
     },
+
     components: { RouterView }
 }
 </script>
