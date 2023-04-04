@@ -2,8 +2,8 @@
     <el-menu :default-openeds="['2']" style="width:210px;min-height:100%;overflow-x: hidden;" background-color="rgb(48,65,86)"
         text-color='#fff' active-text-color="#2990d6" :collapse-transition="true" :collapse="isCollapse" router>
         <div style="height:60px;line-height: 60px;text-align: center;">
-            <img src="../assets/logoc.png" alt="" style="width:170px;position:relative;top:5px;margin-right: 5px;">
-            <!-- <b style="color:white " v-show="logoTextShow">智能平台(demo)</b> -->
+            <!-- <img src="../assets/logoc.png" alt="" style="width:170px;position:relative;top:5px;margin-right: 5px;"> -->
+            <b style="color:white " v-show="logoTextShow">智能平台(demo)</b>
         </div>
         <el-menu-item index="/">
             <template slot="title">

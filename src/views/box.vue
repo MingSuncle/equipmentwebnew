@@ -55,6 +55,37 @@
         </div>
        
             </div>
+            <el-dialog title="编辑盒子配置" :visible.sync="editVisible" width="40%">
+            <el-form :model="editForm" label-width="120px" ref="editForm" :rules="rules">
+                <el-form-item label="盒子id"
+                    ><h4>{{ editForm.boxNo }}</h4></el-form-item
+                >
+                <el-form-item label="盒子ip"><el-input v-model="editForm.boxIp"></el-input></el-form-item>
+                <el-form-item label="盒子名称" prop="boxName"><el-input v-model="editForm.boxName"></el-input></el-form-item>
+                <el-form-item label="盒子所属项目">
+                    <h4>{{ this.$route.params.projectId }}</h4>
+                </el-form-item>
+                <el-form-item label="第三方url">
+                    <el-select
+                        v-model="editForm.centerThirdPartyUrls"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="输入url后点击回车"
+                    >
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="AI事件列表">
+                    <el-select multiple v-model="editForm.boxAiEventId">
+                        <el-option v-for="(e, index) in events" :value="String(index + 1)" :key="e" :label="e"></el-option>
+                    </el-select>
+                </el-form-item> </el-form
+            ><span slot="footer" class="dialog-footer">
+                <el-button @click="cancelEdit">取 消</el-button>
+                <el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
     
 </template>
@@ -112,6 +143,47 @@ export default {
         handleCurrentChange(current_page) {
             this.current_page = current_page;
             this.load();
+        },
+        successMessage(msg) {
+            return {
+                message: msg,
+                duration: 2000,
+                type: 'success'
+            };
+        },
+        faildMessage(msg) {
+            return {
+                message: msg,
+                duration: 2000,
+                type: 'error'
+            };
+        },
+        handleEdit(index, row) {
+            this.editForm = { ...row };
+            this.editVisible = true;
+            console.log(this.editEvents);
+        },
+        async editSubmit(name) {
+            this.$refs[name].validate(async valid => {
+                if (valid) {
+                    this.editVisible = false;
+                    try {
+                        const tmp = {
+                            ...this.editForm,
+                            boxAiEventId: this.editForm.boxAiEventId.join(','),
+                            centerThirdPartyUrls: this.editForm.centerThirdPartyUrls.join(',')
+                        };
+                        await this.$api.box.updateBox(tmp);
+                        this.$message(this.successMessage('修改成功'));
+                        await this.getBoxs();
+                    } catch (error) {
+                        this.$message(this.faildMessage('修改失败'));
+                    }
+                } else {
+                    this.$message(this.faildMessage('请规范输入'));
+                    return false;
+                }
+            });
         },
 
     },
