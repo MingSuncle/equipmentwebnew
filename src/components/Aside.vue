@@ -23,6 +23,10 @@
         <i class="el-icon-cloudy"></i>
         <span slot="title">数据管理</span>
       </el-menu-item>
+      <el-menu-item index="/boxConfig">
+        <i class="el-icon-cloudy"></i>
+        <span slot="title">盒子管理测试</span>
+      </el-menu-item>
     </el-menu>
 </template>
 

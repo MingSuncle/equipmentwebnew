@@ -77,6 +77,14 @@ const routes = [
       },
       component: () => import('../views/dataManage/data.vue')
     },
+    {
+        path: '/boxConfig',
+        name: 'boxConfig',
+        meta:{
+          title:'数据管理'
+        },
+        component: () => import('../views/boxConfig.vue')
+      },
 
     ]
   },

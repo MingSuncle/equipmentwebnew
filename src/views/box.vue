@@ -14,18 +14,22 @@
             </div>
 
             <el-table :data="tableData" border>
-                <el-table-column prop="boxNo" label="盒子id" width="140">
+                <el-table-column prop="boxNo" label="盒子id" width="140" align="center">
                 </el-table-column>
-                <el-table-column prop="boxName" label="盒子名称" width="120">
+                <el-table-column prop="boxName" label="盒子名称" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="boxIp" label="盒子ip">
+                <el-table-column prop="boxIp" label="盒子ip" align="center">
                 </el-table-column>
-                <el-table-column label="第三方URL">
-                    <template #default="scope">
-                        <el-row>
-                            <el-col v-for="(u, i) in scope.row.centerThirdPartyUrls" :key="u + i">{{ u }}</el-col>
-                        </el-row>
-                    </template>
+                <el-table-column  label="第三方URL" align="center">
+                    <el-table-column prop="centerThirdPartyUrls.register" label="注册接口" align="center">
+                    </el-table-column>
+                    <el-table-column prop="centerThirdPartyUrls.upload_message" label="上传信息接口" align="center">
+                    </el-table-column>
+                    <el-table-column prop="centerThirdPartyUrls.get_new_json" label="拉取配置接口" align="center">
+                    </el-table-column>
+                    <el-table-column prop="centerThirdPartyUrls.box_heart" label="心跳检测接口" align="center">
+                    </el-table-column>
+
                 </el-table-column>
                 <el-table-column label="操作" align="center" min-width="100">
                     <template #default="scope">
@@ -126,7 +130,13 @@ export default {
                 this.tableData = res.data.result;
                 this.total = res.data.total;
                 for (var i = 0; i < this.tableData.length; i++) {
-                    this.tableData[i].centerThirdPartyUrls = (this.tableData[i].centerThirdPartyUrls || '').split(',')
+                    this.tableData[i].centerThirdPartyUrls = JSON.parse(this.tableData[i].centerThirdPartyUrls)
+                    console.log(this.tableData[i].centerThirdPartyUrls)
+                    // this.tableData[i].centerThirdPartyUrlsShow = Object.entries(this.tableData[i].centerThirdPartyUrls).map(([key, value]) => ({
+                    //     entry: `${key}: ${value}`
+                    // }));
+                    // console.log(this.tableData[i].centerThirdPartyUrlsShow)
+                    // this.tableData[i].centerThirdPartyUrlsShow = (this.tableData[i].centerThirdPartyUrls || '').split(',')
                 }
             });
         },

@@ -1,12 +1,7 @@
 <template>
     <div>
         <div>
-            <div style="padding:10px 0">
-                <el-input style="width:200px" placeholder="输入电话" suffix-icon="el-icon-search" v-model="phone">
-                </el-input>
-                <el-button class="ml-5" type="primary" @click="search" v-model="phone">搜索
-                </el-button>
-            </div>
+
             <b>版本管理</b>
             <div style="margin:10px 0">
                 <el-button type="primary" @click="goBack">返回 <i class="el-icon-back"></i></el-button>

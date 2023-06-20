@@ -4,6 +4,13 @@
             <b>模型管理</b>
             <div style="margin:10px 0">
                 <el-button type="primary" @click="newModel">增加模型 <i class="el-icon-upload"></i></el-button>
+                <el-upload class="inline-block" action="http://localhost:8888/model/uploadCode"
+                        :show-file-list="false" :on-success="handleUploadSuccess" style="display:inline-block">
+                    <el-button type="primary" >更新代码 <i
+                            class="el-icon-upload"></i></el-button>
+                    <span class="custom-span">上次更新时间:{{ codeTime }}</span>
+                </el-upload>
+
             </div>
 
             <el-table :data="tableData" border>
@@ -45,7 +52,7 @@
 
         </div>
         <el-dialog title="新增模型配置" :visible.sync="createVisible" width="40%">
-            <el-form :model="editForm" label-width="120px" ref="editForm" >
+            <el-form :model="editForm" label-width="120px" ref="editForm">
 
 
                 <el-form-item label="模型ID" prop="modelId"><el-input v-model="editForm.modelId"
@@ -77,6 +84,7 @@ export default {
             tableData: [],
             phone: "",
             form: {},
+            codeTime: "",
             dialogFormVisible: false,
             createVisible: false,
             editForm: {},
@@ -89,12 +97,32 @@ export default {
     methods: {
         search() {
         },
+        async getCodeLastModifiedTime(){
+            const result = await this.$api.model.getCodeTime()
+            if(result.code == 200){
+                this.codeTime = result.data.time
+            }
+            else{
+                this.codeTime = "获取失败"
+            }
+        },
         newModel() {
             this.createVisible = true;
         },
         handleApp() {
             this.dialogFormVisible = true;
             this.form = {};
+        },
+        handleUploadSuccess(response) {
+            console.log('后端返回参数:', response);
+            if(response.code==200){
+              this.$message.success("上传成功")
+              this.load()
+            }
+            else{
+              this.$message.error("上传失败")
+              this.load()
+            }
         },
         load() {
             this.request.get("/model/getAllModelByType", {
@@ -107,8 +135,9 @@ export default {
                 this.tableData = res.data.result;
                 this.total = res.data.total;
             });
+            this.getCodeLastModifiedTime();
         },
-        cancelCreate(){
+        cancelCreate() {
             this.createVisible = false;
             this.editForm = {};
             this.$message({
@@ -117,15 +146,15 @@ export default {
                 type: 'info'
             });
         },
-        handleCreate(){
-            this.request.post("/model/addModel",this.editForm).then(res => {
-                if(res.code==300){
+        handleCreate() {
+            this.request.post("/model/addModel", this.editForm).then(res => {
+                if (res.code == 300) {
                     this.$message(this.faildMessage('模型已存在'));
                 }
-                else if(res.code==500){
+                else if (res.code == 500) {
                     this.$message(this.faildMessage('新增失败'));
                 }
-                else{
+                else {
                     this.$message(this.successMessage('新增成功'));
                     this.createVisible = false;
                     this.editForm = {};
@@ -160,4 +189,21 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-span {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #90d9ff;
+    vertical-align: bottom;
+}
+
+.inline-block {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.margin-change {
+    display: inline-block;
+    margin-left: 10px;
+}
+</style>
