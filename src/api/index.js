@@ -2,7 +2,7 @@
 import boxConfig from './boxConfig'
 // import systemConfig from './systemConfig'
 // import log from './log'
-// import video from './video'
+import video from './video'
 // import register from './register'
 import model from './model'
 
@@ -11,7 +11,7 @@ export default {
     boxConfig,
     // systemConfig,
     // log,
-    // video,
+    video,
     // register,
     model,
 };

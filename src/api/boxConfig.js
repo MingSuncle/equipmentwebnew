@@ -19,7 +19,7 @@ const boxConfig = {
      */
     updateBoxConfig(params) {
         return request({
-            url: '/cgi-bin/boxConfig.cgi',
+            url: '/boxConfig/uploadConfig',
             method: 'post',
             data: params,
             headers: {'content-type': 'application/json;charset=utf-8'}
@@ -56,7 +56,7 @@ const boxConfig = {
      */
     getProcessModeList(params) {
         return request({
-            url: '/cgi-bin/boxConfig.cgi',
+            url: '/box/getProcessParam',
             method: 'get',
             params: params
         })

@@ -45,6 +45,7 @@ const routes = [
         title:'盒子管理'
       },
       component: () => import('../views/box.vue'),
+        props: true,
     },
     {
       path: '/ipc/:boxId',
@@ -83,8 +84,14 @@ const routes = [
         meta:{
           title:'数据管理'
         },
-        component: () => import('../views/boxConfig.vue')
+        component: () => import('../views/boxConfig.vue'),
+        props: true,
       },
+        {
+            path: '/label',
+            name: 'label',
+            component:() => import('../views/LabelView')
+        }
 
     ]
   },

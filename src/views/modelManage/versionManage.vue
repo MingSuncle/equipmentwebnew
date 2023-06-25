@@ -29,7 +29,7 @@
                             @click="handleDelete(scope.$index, scope.row)">删除
                         </el-button>
                         <el-row>
-                            <el-upload action="http://localhost:8888/model/upload"
+                            <el-upload action="http://47.100.71.212:8888/model/upload"
                                 :data="{ model_id: scope.row.modelId, model_version: scope.row.modelVersion }"
                                 :show-file-list="false" :on-success="handleUploadSuccess" style="display:inline-block">
                                 <el-button type="text" icon="el-icon-upload2">上传模型 </el-button>

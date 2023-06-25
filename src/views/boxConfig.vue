@@ -200,6 +200,7 @@
   
   <script>
   export default {
+    props: ["id"],
     data() {
       return {
         deleteVisible: false, //删除确认框
@@ -279,7 +280,9 @@
           time: ""
         },
         timerAIBoxStatus: null, //算法服务状态定时器
+
       };
+
     },
     created() {
       this.getBoxConfig();
@@ -414,6 +417,7 @@
               boxConfigList: this.boxConfigList,
             };
             try {
+              console.log(params)
               // await this.$api.boxConfig.updateBoxConfig(this.boxConfigList);
               await this.$api.boxConfig.updateBoxConfig(params);
               this.loading = false;
@@ -694,8 +698,9 @@
   
       // 获取算法服务aibox的状态
       async getAIBoxStatus() {
+        console.log(this.id)
         const params = {
-          box_id: 'SW-2023050002',
+          box_id: this.id,
         };
         try {
           const res = await this.$api.boxConfig.getAIBoxStatus(params);

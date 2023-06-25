@@ -4,7 +4,7 @@
             <b>模型管理</b>
             <div style="margin:10px 0">
                 <el-button type="primary" @click="newModel">增加模型 <i class="el-icon-upload"></i></el-button>
-                <el-upload class="inline-block" action="http://localhost:8888/model/uploadCode"
+                <el-upload class="inline-block" action="http://47.100.71.212:8888/model/uploadCode"
                         :show-file-list="false" :on-success="handleUploadSuccess" style="display:inline-block">
                     <el-button type="primary" >更新代码 <i
                             class="el-icon-upload"></i></el-button>

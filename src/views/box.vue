@@ -40,7 +40,7 @@
                             @click="handleDelete(scope.$index, scope.row)">删除
                         </el-button>
                         <el-row>
-                            <router-link :to="`/ipc/${scope.row.boxNo}`">
+                            <router-link :to="{ name: 'boxConfig', params: { id: scope.row.boxNo } }">
                                 <el-button type="text" icon="el-icon-setting" class="blue mr10">摄像头配置 </el-button>
                             </router-link>
                             <router-link :to="`/modify_box/${scope.row.boxNo}`">
